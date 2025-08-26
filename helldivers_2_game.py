@@ -23,6 +23,7 @@ class Helldivers2Game(Game):
 
     platforms_other = [
         KeymastersKeepGamePlatforms.PS5,
+        KeymastersKeepGamePlatforms.XSX,
     ]
 
     is_adult_only_or_unrated = True
@@ -54,12 +55,21 @@ class Helldivers2Game(Game):
                 weight=2,
             ),
             GameObjectiveTemplate(
+                label="Complete a mission against the FACTION",
+                data={
+                    "FACTION": (self.factions, 1),
+                    },
+                is_time_consuming=False,
+                is_difficult=False,
+                weight=2,
+            ),
+            GameObjectiveTemplate(
                 label="Perform a full clear on a 40 minutes or blitz mision against the FACTION",
                 data={
                     "FACTION": (self.factions, 1),
                     },
-                is_time_consuming=True,
-                is_difficult=False,
+                is_time_consuming=False,
+                is_difficult=True,
                 weight=2,
             ),
             GameObjectiveTemplate(
@@ -151,6 +161,9 @@ class Helldivers2Game(Game):
     @property
     def has_control_group(self) -> bool:
         return "Control Group" in self.warbonds_owned
+    @property
+    def has_halo_odst(self) -> bool:
+        return "Halo ODST" in self.warbonds_owned
     
     
     @staticmethod
@@ -668,6 +681,25 @@ class Helldivers2Game(Game):
             "AD-49 Apollonian"
         ]
     
+    @functools.cached_property
+    def halo_odst_primary(self) -> List[str]:
+        return [
+            "MA5C Assault Rifle",
+            "M7S SMG",
+            "M90A Shotgun"
+        ]
+    
+    @functools.cached_property
+    def halo_odst_secondary(self) -> List[str]:
+        return ["M6C/SOCOM Pistol"]
+    
+    @functools.cached_property
+    def halo_odst_armor(self) -> List[str]:
+        return [
+            "A-9 Helljumper",
+            "A-35 Recon"
+        ]
+    
     def primary_weapons(self) -> List[str]:
         primary = self.primary_base[:]
         primary.extend(self.archipelago_options.helldivers_2_superstore_primary.value)
@@ -699,6 +731,8 @@ class Helldivers2Game(Game):
             primary.extend(self.force_of_law_primary)
         if self.has_control_group:
             primary.extend(self.control_group_primary)
+        if self.has_halo_odst:
+            primary.extend(self.halo_odst_primary)
         return sorted(primary)
     
     def secondary_weapons(self) -> List[str]:
@@ -730,6 +764,8 @@ class Helldivers2Game(Game):
             secondary.extend(self.borderline_justice_secondary)
         if self.has_masters_of_ceremony:
             secondary.extend(self.masters_of_ceremony_secondary)
+        if self.has_halo_odst:
+            secondary.extend(self.halo_odst_secondary)
         return sorted(secondary)
     
     def trowable(self) -> List[str]:
@@ -843,6 +879,8 @@ class Helldivers2Game(Game):
             armor.extend(self.force_of_law_armor)
         if self.has_control_group:
             armor.extend(self.control_group_armor)
+        if self.has_halo_odst:
+            armor.extend(self.halo_odst_armor)
         return sorted(armor)
 
 #archipelago options
@@ -866,7 +904,8 @@ class warbonds(OptionSet):
         "Borderline Justice",
         "Masters of Ceremony",
         "Force of Law",
-        "Control Group"
+        "Control Group",
+        "Halo ODST"
     ]
     default=valid_keys
 
