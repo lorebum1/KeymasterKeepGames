@@ -164,6 +164,9 @@ class Helldivers2Game(Game):
     @property
     def has_halo_odst(self) -> bool:
         return "Halo ODST" in self.warbonds_owned
+    @property
+    def has_dust_devils(self) -> bool:
+        return "Dust Devils" in self.warbonds_owned
     
     
     @staticmethod
@@ -700,6 +703,29 @@ class Helldivers2Game(Game):
             "A-35 Recon"
         ]
     
+    @functools.cached_property
+    def dust_devils_primary(self) -> List[str]:
+        return ["AR-2 Coyote"]
+    
+    @functools.cached_property
+    def dust_devils_throwable(self) -> List[str]:
+        return ["G-7 Pineapple"]
+    
+    @functools.cached_property
+    def dust_devils_stratagems(self) -> List[str]:
+        return [
+            "S-11 Speargun",
+            "EAT-700 Expendable Napalm",
+            "M5-11 Solo Silo"
+        ]
+    
+    @functools.cached_property
+    def dust_devils_armor(self) -> List[str]:
+        return [
+            "DS-42 Federation's Blade",
+            "DS-191 Scorpion"
+        ]
+    
     def primary_weapons(self) -> List[str]:
         primary = self.primary_base[:]
         primary.extend(self.archipelago_options.helldivers_2_superstore_primary.value)
@@ -733,6 +759,8 @@ class Helldivers2Game(Game):
             primary.extend(self.control_group_primary)
         if self.has_halo_odst:
             primary.extend(self.halo_odst_primary)
+        if self.has_dust_devils:
+            primary.extend(self.dust_devils_primary)
         return sorted(primary)
     
     def secondary_weapons(self) -> List[str]:
@@ -794,6 +822,8 @@ class Helldivers2Game(Game):
             trowable.extend(self.force_of_law_trowable)
         if self.has_control_group:
             trowable.extend(self.control_group_throwable)
+        if self.has_dust_devils:
+            trowable.extend(self.dust_devils_throwable)
         return sorted(trowable)
     
     def booster(self) -> List[str]:
@@ -842,6 +872,8 @@ class Helldivers2Game(Game):
             stratagem.extend(self.force_of_law_stratagems)
         if self.has_control_group:
             stratagem.extend(self.control_group_stratagems)
+        if self.has_dust_devils:
+            stratagem.extend(self.dust_devils_stratagems)
         return sorted(stratagem)
     
     def armor(self) -> List[str]:
@@ -881,6 +913,8 @@ class Helldivers2Game(Game):
             armor.extend(self.control_group_armor)
         if self.has_halo_odst:
             armor.extend(self.halo_odst_armor)
+        if self.has_dust_devils:
+            armor.extend(self.dust_devils_armor)
         return sorted(armor)
 
 #archipelago options
@@ -905,7 +939,8 @@ class warbonds(OptionSet):
         "Masters of Ceremony",
         "Force of Law",
         "Control Group",
-        "Halo ODST"
+        "Halo ODST",
+        "Dust Devils"
     ]
     default=valid_keys
 
@@ -984,3 +1019,4 @@ class superstore_armor(OptionSet):
         "BP-77 Grand Juror"
     ]
     default=valid_keys
+
