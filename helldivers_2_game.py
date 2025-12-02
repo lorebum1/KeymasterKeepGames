@@ -167,6 +167,9 @@ class Helldivers2Game(Game):
     @property
     def has_dust_devils(self) -> bool:
         return "Dust Devils" in self.warbonds_owned
+    @property
+    def has_python_commandos(self) -> bool:
+        return "Python Commandos" in self.warbonds_owned
     
     
     @staticmethod
@@ -726,6 +729,25 @@ class Helldivers2Game(Game):
             "DS-191 Scorpion"
         ]
     
+    @functools.cached_property
+    def python_commandos_primary(self) -> List[str]:
+        return ["AR/GL-21 One Two"]
+    
+    @functools.cached_property
+    def python_commandos_stratagems(self) -> List[str]:
+        return [
+            "M1000 Maxigun",
+            "CQC-9 Defoliation Tool",
+            'AX/FLAM-75 "Guard Dog" Hot Dog'
+        ]
+    
+    @functools.cached_property
+    def python_commandos_armor(self) -> List[str]:
+        return [
+            "RS-40 Beast of Prey",
+            "RS-20 Constrictor"
+        ]
+    
     def primary_weapons(self) -> List[str]:
         primary = self.primary_base[:]
         primary.extend(self.archipelago_options.helldivers_2_superstore_primary.value)
@@ -761,6 +783,8 @@ class Helldivers2Game(Game):
             primary.extend(self.halo_odst_primary)
         if self.has_dust_devils:
             primary.extend(self.dust_devils_primary)
+        if self.has_python_commandos:
+            primary.extend(self.python_commandos_primary)
         return sorted(primary)
     
     def secondary_weapons(self) -> List[str]:
@@ -874,6 +898,8 @@ class Helldivers2Game(Game):
             stratagem.extend(self.control_group_stratagems)
         if self.has_dust_devils:
             stratagem.extend(self.dust_devils_stratagems)
+        if self.has_python_commandos:
+            stratagem.extend(self.python_commandos_stratagems)
         return sorted(stratagem)
     
     def armor(self) -> List[str]:
@@ -915,6 +941,8 @@ class Helldivers2Game(Game):
             armor.extend(self.halo_odst_armor)
         if self.has_dust_devils:
             armor.extend(self.dust_devils_armor)
+        if self.has_python_commandos:
+            armor.extend(self.python_commandos_armor)
         return sorted(armor)
 
 #archipelago options
@@ -940,7 +968,8 @@ class warbonds(OptionSet):
         "Force of Law",
         "Control Group",
         "Halo ODST",
-        "Dust Devils"
+        "Dust Devils",
+        "Python Commandos"
     ]
     default=valid_keys
 
@@ -1019,4 +1048,3 @@ class superstore_armor(OptionSet):
         "BP-77 Grand Juror"
     ]
     default=valid_keys
-
