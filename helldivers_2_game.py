@@ -170,6 +170,9 @@ class Helldivers2Game(Game):
     @property
     def has_python_commandos(self) -> bool:
         return "Python Commandos" in self.warbonds_owned
+    @property
+    def has_redacted_regiment(self) -> bool:
+        return "Redacted Regiment" in self.warbonds_owned
     
     
     @staticmethod
@@ -748,6 +751,36 @@ class Helldivers2Game(Game):
             "RS-20 Constrictor"
         ]
     
+    @functools.cached_property
+    def redacted_regiment_primary(self) -> List[str]:
+        return [
+            "R-72 Censor",
+            "AR-59 Suppressor"
+            ]
+    
+    @functools.cached_property
+    def redacted_regiment_secondary(self) -> List[str]:
+        return ["P-35 Re-Educator"]
+    
+    @functools.cached_property
+    def redacted_regiment_throwable(self) -> List[str]:
+        return ["TM-01 Lure Mine"]
+
+    @functools.cached_property
+    def redacted_regiment_stratagems(self) -> List[str]:
+        return ["B/MD C4 Pack"]
+    
+    @functools.cached_property
+    def redacted_regiment_booster(self) -> List[str]:
+        return ["Concealed Insertion"]
+    
+    @functools.cached_property
+    def redacted_regiment_armor(self) -> List[str]:
+        return [
+            "RS-89 Shadow Paragon",
+            "RS-67 Null Cipher"
+        ]
+    
     def primary_weapons(self) -> List[str]:
         primary = self.primary_base[:]
         primary.extend(self.archipelago_options.helldivers_2_superstore_primary.value)
@@ -785,6 +818,8 @@ class Helldivers2Game(Game):
             primary.extend(self.dust_devils_primary)
         if self.has_python_commandos:
             primary.extend(self.python_commandos_primary)
+        if self.has_redacted_regiment:
+            primary.extend(self.redacted_regiment_primary)
         return sorted(primary)
     
     def secondary_weapons(self) -> List[str]:
@@ -818,6 +853,8 @@ class Helldivers2Game(Game):
             secondary.extend(self.masters_of_ceremony_secondary)
         if self.has_halo_odst:
             secondary.extend(self.halo_odst_secondary)
+        if self.has_redacted_regiment:
+            secondary.extend(self.redacted_regiment_secondary)
         return sorted(secondary)
     
     def trowable(self) -> List[str]:
@@ -848,6 +885,8 @@ class Helldivers2Game(Game):
             trowable.extend(self.control_group_throwable)
         if self.has_dust_devils:
             trowable.extend(self.dust_devils_throwable)
+        if self.has_redacted_regiment:
+            trowable.extend(self.redacted_regiment_throwable)
         return sorted(trowable)
     
     def booster(self) -> List[str]:
@@ -876,6 +915,8 @@ class Helldivers2Game(Game):
             booster.extend(self.masters_of_ceremony_booster)
         if self.has_force_of_law:
             booster.extend(self.force_of_law_booster)
+        if self.has_redacted_regiment:
+            booster.extend(self.redacted_regiment_booster)
         if not booster:
             return "No booster"
         return sorted(booster)
@@ -900,6 +941,8 @@ class Helldivers2Game(Game):
             stratagem.extend(self.dust_devils_stratagems)
         if self.has_python_commandos:
             stratagem.extend(self.python_commandos_stratagems)
+        if self.has_redacted_regiment:
+            stratagem.extend(self.redacted_regiment_stratagems)
         return sorted(stratagem)
     
     def armor(self) -> List[str]:
@@ -943,6 +986,8 @@ class Helldivers2Game(Game):
             armor.extend(self.dust_devils_armor)
         if self.has_python_commandos:
             armor.extend(self.python_commandos_armor)
+        if self.has_redacted_regiment:
+            armor.extend(self.redacted_regiment_armor)
         return sorted(armor)
 
 #archipelago options
@@ -969,7 +1014,8 @@ class warbonds(OptionSet):
         "Control Group",
         "Halo ODST",
         "Dust Devils",
-        "Python Commandos"
+        "Python Commandos",
+        "Redacted Regiment"
     ]
     default=valid_keys
 
